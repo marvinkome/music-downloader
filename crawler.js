@@ -8,17 +8,17 @@ const HOMEDIR = os.homedir();
 const DOWNLOAD_PATH = `${HOMEDIR}/Music/bot_downloads/deezer`;
 
 // setup driver
-async function setUpDriver() {
+function setUpDriver() {
     // firefox options
     const options = new firefox.Options()
         .setPreference("browser.download.folderList", 2)
         .setPreference("browser.download.manager.showWhenStarting", false)
         .setPreference("browser.download.dir", DOWNLOAD_PATH)
         .setPreference(" browser.download.useDownloadDir", false)
-        .setPreference("browser.helperApps.neverAsk.saveToDisk", "audio/mpeg")
-        .headless();
+        .setPreference("browser.helperApps.neverAsk.saveToDisk", "audio/mpeg");
+    // .headless();
 
-    return await new Builder()
+    return new Builder()
         .forBrowser("firefox")
         .setFirefoxOptions(options)
         .build();
@@ -86,54 +86,36 @@ function checkExistsWithTimeout(filePath, timeout) {
     });
 }
 
-class Downloader {
-    constructor(driver) {
-        this.driver = driver;
-    }
+async function downloadSong(title, artist, driver) {
+    // get input and input the song details
+    const input = await driver.findElement(By.name("query"));
+    input.clear();
+    input.sendKeys(`${title} by ${artist}`, Key.ENTER);
 
-    async init() {
-        try {
-            await this.driver.get("https://www.mp3juices.cc/");
-        } catch (e) {
-            throw Error("Error (crawler)", e.message);
-        } finally {
-            this.driver.quit();
-        }
-    }
+    // wait for search result to be available
+    await driver.wait(until.elementLocated(By.id("results")), 3000);
+    const result = await driver.findElement(By.id("result_1"));
 
-    async downloadSong(title, artist) {
-        const driver = this.driver;
+    const name = await result.findElement(By.className("name")).getText();
+    if (!name.toLowerCase().includes(title.toLowerCase())) return null;
+    await result.findElement(By.className("download")).click();
 
-        // get input and input the song details
-        await driver
-            .findElement(By.name("query"))
-            .sendKeys(`${title} by ${artist}`, Key.ENTER);
+    // wait for download options
+    await driver.wait(until.elementLocated(By.id("download_1")), 5000);
 
-        // wait for search result to be available
-        await driver.wait(until.elementLocated(By.id("results")), 3000);
-        const result = await driver.findElement(By.id("result_1"));
+    // click main download
+    const downloadBtn = await driver
+        .findElement(By.id("download_1"))
+        .findElement(By.className("url"));
+    await driver.wait(until.elementIsVisible(downloadBtn), 20000);
+    await downloadBtn.click();
 
-        const name = await result.findElement(By.className("name")).getText();
-        if (!name.toLowerCase().includes(title.toLowerCase())) return null;
-        await result.findElement(By.className("download")).click();
+    const filePath = `${DOWNLOAD_PATH}/${name}.mp3`;
+    await checkExistsWithTimeout(filePath, 120000);
+    await checkNotExistsWithTimeout(`${filePath}.part`, 120000);
 
-        // wait for download options
-        await driver.wait(until.elementLocated(By.id("download_1")), 5000);
-
-        // click main download
-        const downloadBtn = await driver
-            .findElement(By.id("download_1"))
-            .findElement(By.className("url"));
-        await driver.wait(until.elementIsVisible(downloadBtn), 15000);
-        await downloadBtn.click();
-
-        const filePath = `${DOWNLOAD_PATH}/${name}.mp3`;
-        await checkExistsWithTimeout(filePath, 15000);
-        await checkNotExistsWithTimeout(`${filePath}.part`, 15000);
-
-        console.log("successfully downloaded", name);
-        return filePath;
-    }
+    console.log("successfully downloaded", name);
+    return filePath;
 }
 
 async function main(song) {
@@ -150,4 +132,4 @@ async function main(song) {
     }
 }
 
-module.exports = { Downloader, setUpDriver };
+module.exports = { downloadSong, setUpDriver };

@@ -4,7 +4,7 @@ const fetch = require("isomorphic-fetch");
 class MySpotify {
     constructor() {
         this.token =
-            "BQCZdJlI9ix8VciWR9mkLGEjxl3zc2D56QheV2RNnkYgAfGDhusM_7qoXjYMX-3RglmoS9rlud1fSXpyajs";
+            "BQCVRWd0h_XGeSFug4HFVff6LE6uetCFA9iMQsdr8UgVuFA4S5_YRKoySNSMNoqdx3Swgdjby8iLBUvGrVI";
 
         this.api = new SpotifyWebApi({
             clientId: "4244bb258d444367a792863d4818aef9",

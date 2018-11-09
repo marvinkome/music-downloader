@@ -1,13 +1,16 @@
 const getGenre = require("./music/musixmatch");
 const Myspotify = require("./music/spotify");
-const { Downloader, setUpDriver } = require("./crawler");
+const { downloadSong, setUpDriver } = require("./crawler");
 const songs = require("./song_list");
 const writeData = require("./metadata");
 
 const spotify = new Myspotify();
+const failedDownloads = [];
+const failedGetMeta = [];
+const failedWriteMeta = [];
 
 async function getSongData(title, artist) {
-    console.log("fetching songs from apis", title, artist);
+    console.log("fetching meta from apis", title, artist);
 
     try {
         const res = await Promise.all([
@@ -23,37 +26,69 @@ async function getSongData(title, artist) {
     }
 }
 
-async function main(res, rej) {
+async function main() {
     // setup download instance
     const driver = await setUpDriver();
-    const downloadIns = new Downloader(driver);
-    await downloadIns.init();
 
-    // map through all song
-    songs.forEach(async (song, index) => {
-        // 2: download song and return file path
-        const filePath = await downloadIns
-            .downloadSong(song.title, song.artist)
-            .catch(e => rej(`Downloader (${e})`));
+    try {
+        await driver.get("https://www.mp3juices.cc/");
+        console.log("*" * 5, "starting.....");
 
-        if (!filePath) return;
+        // map through all song
+        for (let song of songs) {
+            let filePath;
+            let res;
 
-        // 3: get the file metadata from api
-        const res = await getSongData(song.title, song.artist).catch(e =>
-            rej(`Metadata (${e})`)
-        );
+            // 2: download song and return file path
+            console.log("*" * 5, "download song and return file path");
+            try {
+                filePath = await downloadSong(song.title, song.artist, driver);
+            } catch (e) {
+                console.log(e);
+                failedDownloads.push(song);
+                continue;
+            }
 
-        // 4: write metadata
-        await writeData(song.path, res).catch(e => rej(`Write data (${e})`));
+            // 3: get the file metadata from api
+            console.log("*" * 5, "get the file metadata from api");
+            try {
+                res = await getSongData(song.title, song.artist);
+            } catch (e) {
+                console.log(e);
+                failedGetMeta.push(song);
+                continue;
+            }
 
-        if (index === songs.length - 1) res(undefined);
-    });
+            // 4: write metadata
+            console.log("*" * 5, "write metadata");
+            try {
+                await writeData(filePath, res);
+            } catch (e) {
+                console.log(e);
+                failedWriteMeta.push(song);
+                continue;
+            }
+
+            await driver.navigate().refresh();
+        }
+    } finally {
+        driver.quit();
+    }
 }
 
-function work() {
-    return new Promise(main);
-}
-
-work()
+main()
     .then(() => console.log("done"))
-    .catch(e => console.log("Error", e.message));
+    .catch(e => console.log("Error", e))
+    .then(() => {
+        console.log(
+            "failed downloads",
+            failedDownloads.length,
+            failedDownloads
+        );
+        console.log("failed meta fetch", failedGetMeta.length, failedGetMeta);
+        console.log(
+            "failed write meta",
+            failedWriteMeta.length,
+            failedWriteMeta
+        );
+    });
