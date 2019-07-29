@@ -4,7 +4,7 @@ const qs = require("querystring");
 // musixmatch config
 const main_url = "http://api.musixmatch.com/ws/1.1/";
 const main_query = {
-    apikey: "54166a3d2bc401027ee1eeffd4200abc"
+    apikey: process.env.MUSIXMATCH_KEY
 };
 
 function getGenre(title, artist) {

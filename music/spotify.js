@@ -1,17 +1,13 @@
 const SpotifyWebApi = require("spotify-web-api-node");
 const fetch = require("isomorphic-fetch");
 
-const clientID = "4244bb258d444367a792863d4818aef9";
-const clientSecret = "f4347c62ced64706a8e6c5dd1dc8d462";
-
 class MySpotify {
     constructor() {
-        this.token =
-            "BQCVRWd0h_XGeSFug4HFVff6LE6uetCFA9iMQsdr8UgVuFA4S5_YRKoySNSMNoqdx3Swgdjby8iLBUvGrVI";
+        this.token = "no token";
 
         this.api = new SpotifyWebApi({
-            clientId: "4244bb258d444367a792863d4818aef9",
-            clientSecret: "f4347c62ced64706a8e6c5dd1dc8d462",
+            clientId: process.env.SPOTIFY_ID,
+            clientSecret: process.env.SPOTIFY_SECRET,
             accessToken: this.token
         });
     }
