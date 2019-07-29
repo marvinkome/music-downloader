@@ -1,6 +1,9 @@
 const SpotifyWebApi = require("spotify-web-api-node");
 const fetch = require("isomorphic-fetch");
 
+const clientID = "4244bb258d444367a792863d4818aef9";
+const clientSecret = "f4347c62ced64706a8e6c5dd1dc8d462";
+
 class MySpotify {
     constructor() {
         this.token =
