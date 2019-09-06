@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "node -r esm index.js",
+        "start": "node -r dotenv/config ./index.js",
         "downloader": "node download.js"
     },
     "dependencies": {
