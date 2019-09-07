@@ -1,0 +1,117 @@
+body {
+    font-family: "monaco", sans-serif;
+    background: hsl(0, 0%, 95%);
+    color: hsl(0, 0%, 25%);
+}
+.container {
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    color: hsl(0, 0%, 15%);
+}
+
+header p {
+    width: 50%;
+    margin: auto;
+}
+
+.form-section,
+.list-section {
+    width: 60%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.section-header {
+    background: hsl(0, 0%, 80%);
+    border: 1px solid hsl(0, 0%, 75%);
+    border-radius: 2px;
+    padding: 0px 10px;
+}
+
+.section-header h3 {
+    margin: 7px;
+    text-transform: uppercase;
+    font-size: 17px;
+}
+
+.section-body {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    border: 1px solid hsl(0, 0%, 75%);
+    border-bottom: none;
+}
+
+.input-group {
+    width: 100%;
+    padding: 0 20px;
+}
+
+.input-group label {
+    display: block;
+}
+
+.input-group input {
+    padding: 7px;
+    border: 1px solid hsl(0, 0%, 75%);
+    border-radius: 2px;
+    width: 100%;
+}
+
+.section-footer {
+    border: 1px solid hsl(0, 0%, 75%);
+    border-top: none;
+    border-radius: 2px;
+    padding: 10px 25px;
+    text-align: right;
+}
+
+.section-footer button {
+    padding: 10px 20px;
+    border-radius: 3px;
+    border: none;
+    background: hsl(0, 0%, 15%);
+    color: #fff;
+    cursor: pointer;
+}
+
+.items-section {
+    padding: 20px;
+    border: 1px solid hsl(0, 0%, 75%);
+}
+
+table {
+    width: 100%;
+}
+
+table thead tr {
+    padding: 10px;
+}
+
+.item {
+    text-align: center;
+}
+
+.item a {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #5e35b1;
+}
+
+.main-cta {
+    padding-top: 50px;
+    text-align: center;
+}
+
+.main-cta button {
+    padding: 15px 5em;
+    border-radius: 3px;
+    border: none;
+    background: hsl(0, 0%, 15%);
+    color: #fff;
+    cursor: pointer;
+    font-size: 15px;
+}

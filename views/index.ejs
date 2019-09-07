@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Music Downloader</title>
+        <link href="style.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="container">
+            <header>
+                <h1>Music Downloader</h1>
+                <p>
+                    Welcome to {name}. Fill the form with the title and artists of songs you want to
+                    get downloaded. And you'll get a zip file containing the songs, with correct
+                    metadata.
+                </p>
+            </header>
+
+            <div class="form-section">
+                <form id="main-form" class="form" action="/add-song" method="POST">
+                    <div class="section-header">
+                        <h3>Add a song</h3>
+                    </div>
+                    <div class="section-body">
+                        <div class="input-group">
+                            <label>Title:</label>
+                            <input id="title" />
+                        </div>
+
+                        <div class="input-group">
+                            <label>Artist:</label>
+                            <input id="artist" />
+                        </div>
+                    </div>
+                    <div class="section-footer">
+                        <button type="submit">Add Song</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="list-section">
+                <div class="section-header">
+                    <h3>List of songs</h3>
+                </div>
+
+                <div class="items-section">
+                    <table>
+                        <thead>
+                            <tr class="item">
+                                <!-- <th><b>No.</b></th> -->
+                                <th><b>Title</b></th>
+                                <th><b>Artist</b></th>
+                                <th><b>Action</b></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr class="item"></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="main-cta">
+                <form method="POST" action="/start-downloads">
+                    <input type="hidden" id="songs" />
+                    <button type="submit">
+                        Start Download
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            let songs = [];
+            const table = document.querySelector("tbody");
+
+            function addSong(data) {
+                songs.push(data);
+
+                table.insertAdjacentHTML(
+                    "beforeend",
+                    `
+                    <tr class="item" id="song-${data.id}">
+                        <td>${data.title}</td>
+                        <td>${data.artist}</td>
+                        <td><a class="remove-song" id="${data.id}">Remove</a></td>
+                    </tr>
+                `
+                );
+            }
+
+            function removeSong(id) {
+                songs = songs.filter(data => data.id !== parseInt(id));
+                const item = document.querySelector(`#song-${id}`);
+                item.remove();
+            }
+
+            // form listener
+            const form = document.querySelector("#main-form");
+            form.addEventListener("submit", e => {
+                e.preventDefault();
+
+                const titleInput = e.target["title"];
+                const artistInput = e.target["artist"];
+
+                const title = titleInput.value.trim();
+                const artist = artistInput.value.trim();
+                if (title !== "" && artist !== "") {
+                    addSong({ title, artist, id: Date.now() });
+                } else {
+                    alert("Please add song and title");
+                }
+
+                titleInput.value = "";
+                artistInput.value = "";
+            });
+
+            // remove listerer
+            table.addEventListener("click", e => {
+                if (e.target.classList.contains("remove-song")) {
+                    const id = e.target.id;
+                    removeSong(id);
+                }
+            });
+
+            const mainCta = document.querySelector(".main-cta form");
+            mainCta.addEventListener("submit", e => {
+                e.target["songs"].value = songs;
+            });
+        </script>
+    </body>
+</html>
