@@ -7,11 +7,12 @@ const { writeTag } = require("./lib/metadata");
  * @param {Array<{ title: string, artist: string}>} songs - lists for songs to download from
  * @param {{
  *  spotifyClientID: string,
- *  spotifyClientSecret: string
+ *  spotifyClientSecret: string,
+ *  downloadPath: string
  * }} options - options to pass to modules
  */
-async function musicDownloader(songs, options) {
-    const downloader = await new Crawler();
+async function musicDownloader(songs, { downloadPath, ...options }) {
+    const downloader = await new Crawler(downloadPath);
     const spotify = await new Spotify(options.spotifyClientID, options.spotifyClientSecret);
 
     for (const song of songs) {
@@ -25,7 +26,7 @@ async function musicDownloader(songs, options) {
             const spotifyData = await spotify.searchTrack(song.title, song.artist);
 
             // write data to file
-            await writeTag(filepath, spotifyData);
+            await writeTag(filepath, spotifyData, { downloadPath });
         } catch (e) {
             console.error("GEN ERR:: ", e);
         } finally {

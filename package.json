@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "browser-id3-writer": "^4.1.0",
-        "chromedriver": "^76.0.1",
+        "chromedriver": "^78.0.1",
         "dotenv": "^8.1.0",
         "esm": "^3.2.25",
         "isomorphic-fetch": "^2.2.1",

@@ -1,13 +1,15 @@
 const songs = require("./songs.json");
+const path = require("path");
 const { Crawler } = require("./lib/downloader");
 const { Spotify } = require("spotify-node-sdk");
 const { writeTag } = require("./lib/metadata");
 
+const downloadPath = path.resolve(process.cwd(), "downloads");
 const clientID = process.env.SPOTIFY_ID;
 const clientSecret = process.env.SPOTIFY_SECRET;
 
 async function init() {
-    const downloader = await new Crawler();
+    const downloader = await new Crawler(downloadPath);
     const spotify = await new Spotify(clientID, clientSecret);
 
     for (const song of songs) {
@@ -21,7 +23,7 @@ async function init() {
             const spotifyData = await spotify.searchTrack(song.title, song.artist);
 
             // write data to file
-            await writeTag(filepath, spotifyData);
+            await writeTag(filepath, spotifyData, { downloadPath });
         } catch (e) {
             console.error("GEN ERR:: ", e);
         } finally {
