@@ -4,8 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "node -r dotenv/config ./index.js",
-        "downloader": "node download.js"
+        "start": "node -r dotenv/config ./main.js"
     },
     "dependencies": {
         "browser-id3-writer": "^4.1.0",

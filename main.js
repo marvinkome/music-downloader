@@ -1,18 +1,14 @@
+const songs = require("./songs.json");
 const { Crawler } = require("./lib/downloader");
 const { Spotify } = require("spotify-node-sdk");
 const { writeTag } = require("./lib/metadata");
 
-/**
- * Downloads songs from mp3juices.cc and add metadata from spotify
- * @param {Array<{ title: string, artist: string}>} songs - lists for songs to download from
- * @param {{
- *  spotifyClientID: string,
- *  spotifyClientSecret: string
- * }} options - options to pass to modules
- */
-async function musicDownloader(songs, options) {
+const clientID = process.env.SPOTIFY_ID;
+const clientSecret = process.env.SPOTIFY_SECRET;
+
+async function init() {
     const downloader = await new Crawler();
-    const spotify = await new Spotify(options.spotifyClientID, options.spotifyClientSecret);
+    const spotify = await new Spotify(clientID, clientSecret);
 
     for (const song of songs) {
         try {
@@ -36,4 +32,4 @@ async function musicDownloader(songs, options) {
     await downloader.driver.quit();
 }
 
-exports.musicDownloader = musicDownloader;
+init();
