@@ -1,5 +1,5 @@
 {
-    "name": "spotify",
+    "name": "music-downloader",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
@@ -8,19 +8,11 @@
         "downloader": "node download.js"
     },
     "dependencies": {
-        "axios": "^0.19.0",
         "browser-id3-writer": "^4.1.0",
         "chromedriver": "^76.0.1",
         "dotenv": "^8.1.0",
         "esm": "^3.2.25",
-        "express": "^4.16.3",
-        "ffmetadata": "^1.5.0",
         "isomorphic-fetch": "^2.2.1",
-        "jsmediatags": "^3.8.1",
-        "node-id3": "^0.1.7",
-        "request": "^2.88.0",
-        "selenium-webdriver": "^4.0.0-alpha.4",
-        "spotify-sdk": "^1.0.0-beta2",
-        "spotify-web-api-node": "^4.0.0"
+        "selenium-webdriver": "^4.0.0-alpha.4"
     }
 }
