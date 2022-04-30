@@ -1,17 +1,19 @@
 {
-    "name": "music-downloader",
-    "version": "1.0.0",
-    "main": "index.js",
-    "license": "MIT",
-    "scripts": {
-        "start": "node -r dotenv/config ./main.js"
-    },
-    "dependencies": {
-        "browser-id3-writer": "^4.1.0",
-        "chromedriver": "^78.0.1",
-        "dotenv": "^8.1.0",
-        "esm": "^3.2.25",
-        "isomorphic-fetch": "^2.2.1",
-        "selenium-webdriver": "^4.0.0-alpha.4"
-    }
+  "name": "music-downloader",
+  "version": "1.0.0",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node -r dotenv/config ./src/index.js"
+  },
+  "dependencies": {
+    "axios": "0.27.2",
+    "bee-queue": "^1.4.0",
+    "browser-id3-writer": "4.1.0",
+    "chromedriver": "100.0.0",
+    "dotenv": "8.1.0",
+    "esm": "3.2.25",
+    "isomorphic-fetch": "2.2.1",
+    "selenium-webdriver": "4.1.2"
+  }
 }
