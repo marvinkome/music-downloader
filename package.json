@@ -13,7 +13,7 @@
     "chromedriver": "100.0.0",
     "dotenv": "8.1.0",
     "esm": "3.2.25",
-    "isomorphic-fetch": "2.2.1",
+    "isomorphic-fetch": "3.0.0",
     "selenium-webdriver": "4.1.2"
   }
 }
